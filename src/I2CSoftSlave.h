@@ -1,3 +1,11 @@
+
+// Used by some platforms to put functions in ram.
+#ifndef ICACHE_RAM_ATTR
+#define ICACHE_RAM_ATTR
+#endif
+
+#define MAX_PAYLOAD_SIZE 5
+
 class i2c_soft_slave {
   public:
 
@@ -33,7 +41,7 @@ class i2c_soft_slave {
       byte addr;
       bool w;
       byte dc;
-      byte data[5];
+      byte data[MAX_PAYLOAD_SIZE];
     };
     volatile static i2c_packet pack;
     static void (*on_read)(i2c_packet *pack);
@@ -61,7 +69,7 @@ class i2c_soft_slave {
         return;
 
       // If no activa packet, eller to many bytes, just make sure we are in stopped state.
-      if (pack.dc > 5) {
+      if (pack.dc >= MAX_PAYLOAD_SIZE) {
         stop();
         return;
       }
